@@ -15,7 +15,7 @@ public class Main {
         };
         //Graphe 1, Matrice incidence, beaucoup moins d'affectations de 0 donc c'est plus efficace pour représenter ce graphe
         char [][] matriceI_Un = {
-            {1,0,0},
+                {1,0,0},
                 {0,1,0},
                 {0,1,1},
                 {0,0,1},
@@ -43,17 +43,15 @@ public class Main {
 
         };
 
-        //Graphe 2, Matrice adjacence, beaucoup moins d'affectations de 0 donc c'est plus efficace pour représenter ce graphe
+        //Graphe 3, Matrice adjacence, qui représente un graphe K(n) qui produit une matrice adjacence idéale à utiliser dans notre programme,
         char [][] matriceA_Trois = {
-                {0,0,0,0,0,0,0},
-                {0,0,1,0,0,0,0},
-                {0,1,0,0,1,1,0},
-                {0,0,0,0,0,1,1},
-                {0,0,1,0,0,0,1},
-                {0,0,1,1,0,0,0},
-                {0,0,0,1,1,0,0}
+                {0,1,1,1,1},
+                {1,0,1,1,1},
+                {1,1,0,1,1},
+                {1,1,1,0,1},
+                {1,1,1,1,0},
         };
-        //Graphe 2, Matrice incidence, sommets < arcs donc il y a plus d'affectations de 0
+        //Graphe 3, Matrice incidence, sommets < arcs donc il y a plus d'affectations de 0
         char [][] matriceI_Trois = {
                 {1,0,0,0,1,1,0,0,0,1},
                 {1,1,0,0,0,0,1,1,0,0},
@@ -63,17 +61,15 @@ public class Main {
 
         };
 
-        //Graphe 2, Matrice adjacence, beaucoup moins d'affectations de 0 donc c'est plus efficace pour représenter ce graphe
+        //Graphe 4, Matrice adjacence, une matrice presque idéale à utiliser dans notre programme
         char [][] matriceA_Quatre = {
-                {0,0,0,0,0,0,0},
-                {0,0,1,0,0,0,0},
-                {0,1,0,0,1,1,0},
-                {0,0,0,0,0,1,1},
-                {0,0,1,0,0,0,1},
-                {0,0,1,1,0,0,0},
-                {0,0,0,1,1,0,0}
+                {0,1,1,1,0},
+                {1,0,1,1,1},
+                {1,1,0,1,1},
+                {1,1,1,0,1},
+                {0,1,1,1,0},
         };
-        //Graphe 2, Matrice incidence, sommets < arcs donc il y a plus d'affectations de 0
+        //Graphe 4, Matrice incidence, sommets < arcs donc il y a plus d'affectations de 0
         char [][] matriceI_Quatre = {
                 {1,0,0,0,1,0,0,0,1},
                 {1,1,0,0,0,1,1,0,0},
@@ -83,17 +79,29 @@ public class Main {
 
         };
 
+        GrapheA grapheA_Un = new GrapheA(matriceA_Un);
         GrapheI grapheI_Un = new GrapheI(matriceI_Un);
+
+        grapheA_Un.evaluation(0);
+        grapheI_Un.evaluation(0);
+
+        GrapheA grapheA_Deux = new GrapheA(matriceA_Deux);
         GrapheI grapheI_Deux = new GrapheI(matriceI_Deux);
+
+        grapheA_Deux.evaluation(0);
+        grapheI_Deux.evaluation(0);
+
+        GrapheA grapheA_Trois = new GrapheA(matriceA_Trois);
         GrapheI grapheI_Trois = new GrapheI(matriceI_Trois);
+
+        grapheA_Trois.evaluation(0);
+        grapheI_Trois.evaluation(0);
+
+        GrapheA grapheA_Quatre = new GrapheA(matriceA_Quatre);
         GrapheI grapheI_Quatre = new GrapheI(matriceI_Quatre);
 
-        //System.out.print(grapheI_Deux.chercheIncidence(0, 8));
-        //grapheI_Deux.evaluation(3);
-        grapheI_Trois.evaluation(3);
-        //System.out.println(grapheI_Deux.identifieSousGraphes());
-        //grapheI_Un.evaluation(2);
-        //System.out.println(grapheI_Trois.estPlanaire());
+        grapheA_Quatre.evaluation(0);
+        grapheI_Quatre.evaluation(0);
 
     }
 }

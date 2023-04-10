@@ -1,28 +1,28 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
-// Les graphes simples représentés par des matrices d'incidences sont plus difficiles à implémenter en programmation.
-// Aussi, il faut parcourir les matrices plus fois qu'avec les matrices d'adjacence pour traverser un graph simple.
-// Mais ils contiennent les informations pour chaque arc, qui permet l'implémentation pour les multigraphes.
-// La matrice incidence devient plus efficace dans cet algorithme (relative à la matrice d'adjacence) quand
-// le graphe a moins d'arcs et plus de sommets. Les matrices d'incidence fournissent beaucoup plus d'informations
-// concernant un graphe.
+// Les matrices d'adjacence sont plus faciles à utiliser en programmation, mais n'indique pas directement les arcs.
+// Dans un graphe simple, on peut déduire chaque arc par le degré de chaque sommet, mais dans un multiple graphe,
+// les matrices d'adjacence manque les informations requises pour représenter tous les arcs dans un programme comme ceci.
+// La matrice adjacence devient plus efficace dans cet algorithme (relative à la matrice d'incidence) quand
+// le graphe a moins de sommets et plus d'arcs, jusqu'à un graphe complet.
 
-public class GrapheI {
-
+public class GrapheA {
     private static int noInstance=0;
-    private char [][] matriceI;
+    private char[][] matriceA;
     private int nbrArcs, nbrSommets, iterations, affectations;
-    private ArrayList <Integer> arcsD, arcsA, visitedSommets;
+    private ArrayList<Integer> arcsD, arcsA, visitedSommets;
+    private ArrayList<ArrayList<Integer>> arcs;
     private HashMap<String, Integer> degres;
 
-    public GrapheI (char [][] matriceI) {
-        this.matriceI = matriceI;
+    public GrapheA(char[][] matriceA) {
+        this.matriceA = matriceA;
         noInstance++;
 
     }
 
-    public void evaluation (int sommet) { //Traitement de graphe
+    public void evaluation(int sommet) { //Traitement de graphe
 
         visitedSommets = new ArrayList<Integer>();
         arcsD = new ArrayList<Integer>();
@@ -41,16 +41,16 @@ public class GrapheI {
         visitedSommets = new ArrayList<Integer>();
         parcourir(sommet);
 
-        System.out.println("\n\nÉvaluation de graphe "+noInstance+", matrice d'incidence" +
+        System.out.println("\n\nÉvaluation de graphe "+noInstance+", matrice d'adjacence" +
                 "\n----------------------------------------------------" +
                 "\n");
         //System.out.println("Arcs qui forment la voie de l'algorithme parcourir :"+arcsD);
         //System.out.println("Autres arcs que l'algorithme a essayé :"+arcsA);
-        System.out.println("Degre de chaque sommet: "+degres);
-        System.out.println("Nombre de sommets en total: "+nbrSommets);
-        System.out.println("Nombre d'arcs en total: "+nbrArcs);
-        System.out.println("Iterations: "+iterations);
-        System.out.println("Affectations: "+affectations);
+        System.out.println("Degre de chaque sommet: " + degres);
+        System.out.println("Nombre de sommets en total: " + nbrSommets);
+        System.out.println("Nombre d'arcs en total: " + nbrArcs);
+        System.out.println("Iterations: " + iterations);
+        System.out.println("Affectations: " + affectations);
 
         if (!contientCycle()) {
             System.out.println("Il n'existe pas un cycle.");
@@ -76,12 +76,12 @@ public class GrapheI {
             System.out.println("À partir du nombre de sommets, d'arcs et l'existence d'un tricycle, " +
                     "\non ne peut pas constater que ce graphe est certainement non planaire. " +
                     "\nIl faut évaluer ce graphe avec un algorithme basé sur le théorème de Kuratowski," +
-                    "\nou un algorithme comme celui de Hopcroft et Tarjan.");
+                    "\nou un algorithme comme celui de Hopcroft et Tarjan.\n\n\n");
         }
 
     }
 
-    private boolean contientCycle () {
+    private boolean contientCycle() {
         /*
         S'il existe des arcs qui mènent à des sommets déjà explorés, un cycle existe
          */
@@ -108,20 +108,22 @@ public class GrapheI {
 
 
         return false;
-    };
+    }
 
-    private boolean contientCycleEulerien () {
+    private boolean contientCycleEulerien() {
 
         //Examiner si le graphe est connexe
-        if (identifieSousGraphes().size()!=1) {
+        if (identifieSousGraphes().size() != 1) {
             return false;
         }
 
         trouveDegres();
         for (int i = 0; i < degres.size(); i++) {
 
-            int deg = degres.get("S"+i);
-            if (deg%2!=0 || deg == 0) {return false;} // Si degré impair ou sommet isolé
+            int deg = degres.get("S" + i);
+            if (deg % 2 != 0 || deg == 0) {
+                return false;
+            } // Si degré impair ou sommet isolé
 
             return true;
 
@@ -163,11 +165,11 @@ public class GrapheI {
         return true;
     }
 
-    private boolean contientChaineEulerien () {
+    private boolean contientChaineEulerien() {
         int impair = 0;
 
         //Examiner si le graphe est connexe
-        if (identifieSousGraphes().size()!=1) {
+        if (identifieSousGraphes().size() != 1) {
             return false;
         }
 
@@ -176,26 +178,26 @@ public class GrapheI {
         for (int i = 0; i < degres.size(); i++) {
 
             //Trouve le degré
-            int deg = degres.get("S"+i);
-            if (deg%2!=0 && deg != 0) { // Si degré impair
+            int deg = degres.get("S" + i);
+            if (deg % 2 != 0 && deg != 0) { // Si degré impair
                 impair++;
             }
 
-            if (impair>2) { // Si la totale des degrés impairs est supérieure à 2
+            if (impair > 2) { // Si la totale des degrés impairs est supérieure à 2
                 return false; // Ce ne contient pas une chaîne eulérienne
             }
 
         }
 
-        if (impair==2) { // S'il contient exactement deux
+        if (impair == 2) { // S'il contient exactement deux
             return true; // Ce contient une chaîne eulérienne
         } else {
             return false;
         }
 
-    };
+    }
 
-    private boolean estPlanaire () {
+    private boolean estPlanaire() {
         /*
         Des conditions de planarité pour un graphe simple connexe
         Condition 1 : a ≤ 3s − 6, s ≥ 3
@@ -203,10 +205,10 @@ public class GrapheI {
         Condition 3 : degré moyen < 6
         s'il existe des sous graphes, vérifie chacun
         */
-        HashMap <String, ArrayList<Integer>> sousGraphes = identifieSousGraphes();
+        HashMap<String, ArrayList<Integer>> sousGraphes = identifieSousGraphes();
 
         //Pour chaque sous graphe
-        for ( int i = 0; i < sousGraphes.size(); i++) {
+        for (int i = 0; i < sousGraphes.size(); i++) {
             int degreSousGrapheTotal = 0;
             int nbrSommetsSousGraphe;
 
@@ -214,32 +216,38 @@ public class GrapheI {
             arcsD.clear();
             arcsA.clear();
             //parcourir le sous graphe
-            parcourir (sousGraphes.get(("Graphe "+i)).get(0));
+            parcourir(sousGraphes.get(("Graphe " + i)).get(0));
 
             //Pour chaque sommet découvert dans le sous graphe
             for (int in : visitedSommets) {
 
                 //Pour chaque pair de sommet et degrés
 
-                degreSousGrapheTotal += degres.get("S"+in);
+                degreSousGrapheTotal += degres.get("S" + in);
 
             }
 
             //Examiner condition 3
             //System.out.println(visitedSommets);
             nbrSommetsSousGraphe = visitedSommets.size();
-            if (!((degreSousGrapheTotal/nbrSommetsSousGraphe)<6)) {return false;}
+            if (!((degreSousGrapheTotal / nbrSommetsSousGraphe) < 6)) {
+                return false;
+            }
             //System.out.println(nbrSommetsSousGraphe);
             //System.out.println(degreSousGrapheTotal);
             //System.out.println("cond3");
 
             //Examiner condition 2
             compteArcsEtSommetsSG();
-            if (!(trouveTricycle())&&!((nbrArcs<=(2*nbrSommets)-4))&&nbrSommets>=3) {return false;}
+            if (!(trouveTricycle()) && !((nbrArcs <= (2 * nbrSommets) - 4)) && nbrSommets >= 3) {
+                return false;
+            }
             //System.out.println((nbrArcs<=(2*nbrSommets)-4));
 
             //Examiner condition 1
-            if ((trouveTricycle())&&!(nbrArcs<=(3*nbrSommets)-6)) {return false;}
+            if ((trouveTricycle()) && !(nbrArcs <= (3 * nbrSommets) - 6)) {
+                return false;
+            }
             //System.out.println("cond1");
 
         }
@@ -247,12 +255,12 @@ public class GrapheI {
         return true;
     }
 
-    private HashMap <String, ArrayList<Integer>> identifieSousGraphes () {
+    private HashMap<String, ArrayList<Integer>> identifieSousGraphes() {
 
-        HashMap <String, ArrayList<Integer>> graphes = new HashMap <String, ArrayList<Integer>> (); //Entreposage d'un graphe connexe seul ou des sous graphes dérivés d'un graphe non connexe
+        HashMap<String, ArrayList<Integer>> graphes = new HashMap<String, ArrayList<Integer>>(); //Entreposage d'un graphe connexe seul ou des sous graphes dérivés d'un graphe non connexe
         ArrayList<Integer> doub = new ArrayList<Integer>();
 
-        for (int i = 0; i < matriceI.length; i++) {
+        for (int i = 0; i < matriceA.length; i++) {
             visitedSommets.clear();
             arcsD.clear();
             arcsA.clear();
@@ -272,7 +280,7 @@ public class GrapheI {
             //Vérifier si "graphes" ne contient pas de graphe
             if (graphes.isEmpty()) {
                 //System.out.println("isempty");
-                graphes.put("Graphe "+(i), liste);
+                graphes.put("Graphe " + (i), liste);
             }
 
             //Comparaison entre sous graph potentiel et les autres sous graphes (s'ils existent)
@@ -291,36 +299,35 @@ public class GrapheI {
                 } else {
 
  */
-                    //Pour chaque valeur dans la clé actuelle de "graphes"
-                    for ( int iii = 0; iii < liste.size(); iii++) {
-                        //System.out.println(iii);
-                        if (!(doub.contains(liste.get(iii)))) {
-                            //System.out.println(liste.get(iii));
-                            //System.out.println(graphes.get("Graphe " + ii));
-                            //System.out.println((graphes.get("Graphe " + ii).contains(liste.get(iii))));
-                            //Comparer chaque valeur, si toutes les valeurs ne sont pas identiques, les graphes sont différents
-                            if (!(graphes.get("Graphe " + ii).contains(liste.get(iii)))) {
-                                graphes.put("Graphe " + (ii + 1), liste);
-                                //System.out.println("ajoutée");
-                                doub.add(liste.get(iii));
-                                //System.out.println(doub);
-                                break;
-                            }
+                //Pour chaque valeur dans la clé actuelle de "graphes"
+                for (int iii = 0; iii < liste.size(); iii++) {
+                    //System.out.println(iii);
+                    if (!(doub.contains(liste.get(iii)))) {
+                        //System.out.println(liste.get(iii));
+                        //System.out.println(graphes.get("Graphe " + ii));
+                        //System.out.println((graphes.get("Graphe " + ii).contains(liste.get(iii))));
+                        //Comparer chaque valeur, si toutes les valeurs ne sont pas identiques, les graphes sont différents
+                        if (!(graphes.get("Graphe " + ii).contains(liste.get(iii)))) {
+                            graphes.put("Graphe " + (ii + 1), liste);
+                            //System.out.println("ajoutée");
                             doub.add(liste.get(iii));
                             //System.out.println(doub);
+                            break;
                         }
+                        doub.add(liste.get(iii));
+                        //System.out.println(doub);
                     }
-  //              }
+                }
+                //              }
             }
 
         }
 
 
-
         return graphes;
     }
 
-    private boolean trouveTricycle () {
+    private boolean trouveTricycle() {
         /*
         Pour chaque sommet :
         1. Vérifie si le sommet a deux enfants
@@ -331,7 +338,7 @@ public class GrapheI {
 
         //Pour chaque sommet
         for (int sommet : visitedSommets) {
-            ArrayList <Integer> fils = new ArrayList<Integer>();
+            ArrayList<Integer> fils = new ArrayList<Integer>();
 
             //Si degré > 1
 
@@ -346,7 +353,7 @@ public class GrapheI {
             //Pour chaque fils
 
             for (int f : fils) {
-                ArrayList <Integer> freres = new ArrayList<Integer>();
+                ArrayList<Integer> freres = new ArrayList<Integer>();
                 //ajoute les frères
                 for (int arc : arcsIncidents(f)) {
                     //Ajoute le sommet coincident
@@ -369,16 +376,16 @@ public class GrapheI {
         return false;
     }
 
-    private void trouveDegres () {
+    private void trouveDegres() {
         String clef;
         int degre;
         degres.clear();
 
         for (int i = 0; i < nbrSommets; i++) {
-            clef = "S"+i;
+            clef = "S" + i;
             degre = 0;
-            for (int ii = 0; ii < nbrArcs; ii++) {
-                if (matriceI[i][ii] == 1) {
+            for (int ii = 0; ii < nbrSommets; ii++) {
+                if (matriceA[i][ii] == 1) {
                     degre++;
                 }
             }
@@ -390,38 +397,165 @@ public class GrapheI {
         if (!(visitedSommets.contains(sommet))) {
             visitedSommets.add(sommet);
         }
+        /*
+        for(int i : visitedSommets) {
+            System.out.print(i+" ");
+        }
+         */
 
         for (int i = 0; i < arcsIncidents(sommet).size(); i++) {
+            //System.out.println(!(arcsA.contains(arcsIncidents(sommet)[i])) || !(arcsD.contains(arcsIncidents(sommet)[i])));
+            //System.out.println(arcsIncidents(sommet).get(i));
             if (!(arcsA.contains(arcsIncidents(sommet).get(i))) && !(arcsD.contains(arcsIncidents(sommet).get(i)))) { //si l'arc n'a pas été visité
                 //cherche pour l'autre sommet qui coincide
 
                 int sommetAdj = chercheIncidence(sommet, arcsIncidents(sommet).get(i));
+                //System.out.println(sommetAdj);
                 if (!(visitedSommets.contains(sommetAdj))) {
+                    //System.out.println("ArcsD :"+arcsD);
                     arcsD.add(arcsIncidents(sommet).get(i));
-                    parcourir (sommetAdj);
+                    parcourir(sommetAdj);
 
                 } else {
+                    //System.out.println("ArcsA :"+arcsA);
                     arcsA.add(arcsIncidents(sommet).get(i));
 
                 }
             }
 
         }
+    }
+
+    private ArrayList<Integer> arcsIncidents (int sommet) { //Parcourir le matrice d'incidence pour trouver les arcs qui coincide avec le sommet donné comme argument
+        int c = 0;
+        ArrayList <Integer> arcs = new ArrayList<>();
+
+        /*
+        for (int i = 0; i < matriceA[sommet].length; i++) {
+            if (matriceA[sommet][i] == 1) {
+                //System.out.println(i);
+                arcs.add(i);
+            }
+        }
+
+        return arcs;
+         */
+
+        ArrayList<ArrayList<Integer>> idArcs = identifieArcs();
+        for (int i = 0; i < idArcs.size(); i++) { //Pour chaque arc identifier dans le graphe
+            if (idArcs.get(i).contains(sommet)) { //Si le sommet se trouve sur cet arc
+                arcs.add(i); //Ajoute l'indice de l'arc à la liste des arcs incident
+            }
+        }
+
+        //System.out.println(idArcs);
+
+        return arcs;
+
+    }
+
+    private int chercheIncidence (int sommet, int arcId) { //Parcourir le matrice d'incidence pour trouver les arcs associés avec un sommet
+        int c=0;
+        int adjacent=0;
+        ArrayList<ArrayList<Integer>> idArcs = identifieArcs();
+
+        for (int i = 0; i < 2; i++) { //les arcs sont entreposés en listes de deux toujours
+            if (!(idArcs.get(arcId).get(i).equals(sommet))) { //Trouve le sommet adjacent (qui est l'autre sommet dans la liste, qui n'est pas égale à "sommet")
+                adjacent=idArcs.get(arcId).get(i);
+            }
+        }
+
+        /*
+
+        do {
+            iterations++;
+            if (matriceA[sommet++][arcID] == 1) {
+                // System.out.println("true");
+                c++;
+                if (c==2) {
+                    //System.out.println("truetrue");
+                    adjacent = --sommet;
+                }
+            }
+
+            if (sommet > matriceA.length-1) {
+                sommet = 0;
+            }
 
 
-       // return 0;
+        } while (c<2);
+        //System.out.println(c);
+
+         */
+
+        return adjacent;
+
+    }
+
+    //Déduire l'identité de chaque arc et les entrepose dans une liste. Un arc est représenté comme une adjacence.
+    private ArrayList<ArrayList<Integer>> identifieArcs () {
+        ArrayList <Integer> arc = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> arcs = new ArrayList<ArrayList<Integer>>();
+
+        for (int i = 0; i < matriceA.length; i++) {
+
+            for (int ii = 0; ii < matriceA[i].length; ii++) {
+
+                if (matriceA[i][ii] == 1) {
+                    arc.add(i);
+                    arc.add(ii);
+                    Collections.sort(arc);
+
+                    if (arcs.isEmpty()) {
+                        arcs.add(arc);
+                        //System.out.println("ajouté");
+                    }
+
+                    boolean doub = false;
+                    for (ArrayList<Integer> a : arcs ) {
+                        //System.out.println(a);
+                        //System.out.println(a.equals(arc));
+                        if ((a.equals(arc))) {
+                            doub = true;
+                            break;
+                        }
+                    }
+
+                    if (doub == false) {
+                        arcs.add(arc);
+                    }
+
+                    arc = new ArrayList<>();
+
+                }
+
+            }
+
+        }
+
+        //System.out.println(arcs);
+
+        return arcs;
+
     }
 
     private void compteArcsEtSommets () {
         nbrSommets = 0;
         nbrArcs = 0;
 
-        for (int i = 0; i < matriceI.length; i++) {
+        for (int i = 0; i < matriceA.length; i++) {
             nbrSommets++;
+            for (int ii = 0; ii < matriceA[0].length; ii++) {
+                if (matriceA[i][ii]==1) {
+                    nbrArcs++;
+                }
+
+            }
+
         }
-        for (int i = 0; i < matriceI[0].length; i++) {
-            nbrArcs++;
-        }
+
+        nbrArcs/=2; //Handshake theorem
+
     }
 
     private void compteArcsEtSommetsSG () {
@@ -442,78 +576,46 @@ public class GrapheI {
     }
 
     //Visiter tous les sommets simplement, et calculer le nombre d'itérations et affectations
-    private void parcourirSimple (int sommet) {
+
+    private void parcourirSimple(int sommet) {
         if (!(visitedSommets.contains(sommet))) {
             visitedSommets.add(sommet);
             affectations++;
         }
 
-        int a = arcsIncidents(sommet).size();
+        int a = sommetsIncidents(sommet).size();
         affectations++;
         for (int i = 0; i < a; i++) {
             iterations++;
-            //System.out.println(arcsIncidents(sommet).get(i));
-            int sommetAdj = chercheIncidence(sommet, arcsIncidents(sommet).get(i));
+            //System.out.println(arcsIncidents(sommet));
+            int sommetAdj = sommetsIncidents(sommet).get(i);
             affectations++;
-            if (!(visitedSommets.contains(sommetAdj))) { //si l'arc n'a pas été visité
-                //cherche pour l'autre sommet qui coincide
+            if (!(visitedSommets.contains(sommetAdj))) { //si le sommet n'a pas été visité
+                //cherche pour un sommet adjacent
                 parcourirSimple(sommetAdj);
 
             }
         }
     }
 
-    //La méthode parcourirSimple() dépend sur toutes les méthodes au-dessous, donc la totale d'itérations et affectations inclura les itérations et affectations de chaque méthode ci-dessous ainsi que celles de parcourirSimple()
+    //La méthode parcourirSimple() dépend sur la méthode ci-dessous, donc la totale d'itérations et affectations inclura les itérations et affectations de chaque méthode ci-dessous ainsi que celles de parcourirSimple()
 
-    private ArrayList<Integer> arcsIncidents (int sommet) { //Parcourir le matrice d'incidence pour trouver un sommet qui coincide avec le sommet donné comme argument
+    private ArrayList<Integer> sommetsIncidents (int sommet) { //Parcourir le matrice d'incidence pour trouver un sommet qui est adjacent avec le sommet donné comme argument
         int c = 0;
         affectations++;
-        ArrayList <Integer> arcs = new ArrayList<Integer>();
+        ArrayList <Integer> sommets = new ArrayList<>();
         affectations++;
 
-        for (int i = 0; i < matriceI[sommet].length; i++) {
+        for (int i = 0; i < matriceA[sommet].length; i++) {
             iterations++;
-            if (matriceI[sommet][i] == 1) {
+            if (matriceA[sommet][i] == 1) {
                 //System.out.println(i);
-                arcs.add(i);
+                sommets.add(i);
                 affectations++;
             }
         }
 
-        return arcs;
-
-    }
-
-    private int chercheIncidence (int sommet, int arc) { //Parcourir le matrice d'incidence pour trouver les arcs associés avec un sommet
-        int c=0;
-        affectations++;
-        int adjacent=0;
-        affectations++;
-
-        do {
-            iterations++;
-            affectations++;
-            if (matriceI[sommet++][arc] == 1) {
-                // System.out.println("true");
-                c++;
-                affectations++;
-                if (c==2) {
-                    //System.out.println("truetrue");
-                    adjacent = --sommet;
-                    affectations++;
-                }
-            }
-
-            if (sommet > matriceI.length-1) {
-                sommet = 0;
-                affectations++;
-            }
-
-
-        } while (c<2);
-        //System.out.println(c);
-
-        return adjacent;
+        return sommets;
 
     }
 
