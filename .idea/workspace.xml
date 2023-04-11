@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AnalysisUIOptions">
+    <option name="ANALYZE_INJECTED_CODE" value="false" />
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e6f9f63-432e-43d2-b3f7-92e323d5d469" name="Changes" comment="incidence matrix treatment">
-      <change afterPath="$PROJECT_DIR$/src/GrapheA.java" afterDir="false" />
+    <list default="true" id="1e6f9f63-432e-43d2-b3f7-92e323d5d469" name="Changes" comment="programme complete">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/GrapheA.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GrapheA.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/GrapheI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/GrapheI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tp1 PIF1005.docx" beforeDir="false" afterPath="$PROJECT_DIR$/tp1 PIF1005.docx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,20 +37,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;TODO_SCOPE&quot;: &quot;All Places&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="" />
@@ -69,7 +73,8 @@
       <workItem from="1680887578591" duration="454000" />
       <workItem from="1680888050127" duration="21986000" />
       <workItem from="1680964294375" duration="26221000" />
-      <workItem from="1681051786993" duration="25549000" />
+      <workItem from="1681051786993" duration="30207000" />
+      <workItem from="1681161456893" duration="4340000" />
     </task>
     <task id="LOCAL-00001" summary="incidence matrix treatment">
       <created>1680991354274</created>
@@ -78,7 +83,21 @@
       <option name="project" value="LOCAL" />
       <updated>1680991354274</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="incidence matrix treatment">
+      <created>1681085660012</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1681085660012</updated>
+    </task>
+    <task id="LOCAL-00003" summary="programme complete">
+      <created>1681085717559</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1681085717560</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -97,7 +116,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="incidence matrix treatment" />
-    <option name="LAST_COMMIT_MESSAGE" value="incidence matrix treatment" />
+    <MESSAGE value="programme complete" />
+    <option name="LAST_COMMIT_MESSAGE" value="programme complete" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class GrapheA {
     private static int noInstance=0;
-    private char[][] matriceA;
+    private final char[][] matriceA;
     private int nbrArcs, nbrSommets, iterations, affectations;
     private ArrayList<Integer> arcsD, arcsA, visitedSommets;
     private ArrayList<ArrayList<Integer>> arcs;
@@ -88,7 +88,6 @@ public class GrapheA {
 
         //Identifier les sous graphes
         HashMap<String, ArrayList<Integer>> sousGraphes = identifieSousGraphes();
-        boolean ce = false;
 
         //Pour chaque sous graphe
         for (int i = 0; i < sousGraphes.size(); i++) {
@@ -121,47 +120,11 @@ public class GrapheA {
         for (int i = 0; i < degres.size(); i++) {
 
             int deg = degres.get("S" + i);
-            if (deg % 2 != 0 || deg == 0) {
-                return false;
-            } // Si degré impair ou sommet isolé
-
-            return true;
+            // Si degré impair ou sommet isolé
+            return deg % 2 == 0 && deg != 0;
 
         }
 
-        //HashMap<String, ArrayList<Integer>> sousGraphes = identifieSousGraphes();
-        //boolean ce = false;
-
-        /*
-        for (int i = 0; i < sousGraphes.size(); i++) {
-            int degreSousGraphe = 0;
-            int nbrSommetsSousGraphe;
-            ce = true;
-
-            visitedSommets.clear();
-            arcsD.clear();
-            arcsA.clear();
-            //parcourir le sous graphe
-            parcourir(sousGraphes.get(("Graphe " + i)).get(0));
-
-            //Pour chaque sommet découvert dans le sous graphe
-            for (int in : visitedSommets) {
-
-                //Pour chaque pair de sommet et degrés
-
-                degreSousGraphe = degres.get("S" + in);
-
-                //System.out.println(degreSousGraphe);
-                //Si le degré n'est pas pair
-                if (!(degreSousGraphe%2==0)||degreSousGraphe==0) {
-                    ce = false;
-                    break; //Essayer un autre sous graphe
-                }
-
-            }
-        }
-
-         */
         return true;
     }
 
@@ -189,11 +152,8 @@ public class GrapheA {
 
         }
 
-        if (impair == 2) { // S'il contient exactement deux
-            return true; // Ce contient une chaîne eulérienne
-        } else {
-            return false;
-        }
+        // S'il contient exactement deux
+        return impair == 2; // Ce contient une chaîne eulérienne
 
     }
 
@@ -228,27 +188,21 @@ public class GrapheA {
             }
 
             //Examiner condition 3
-            //System.out.println(visitedSommets);
             nbrSommetsSousGraphe = visitedSommets.size();
             if (!((degreSousGrapheTotal / nbrSommetsSousGraphe) < 6)) {
                 return false;
             }
-            //System.out.println(nbrSommetsSousGraphe);
-            //System.out.println(degreSousGrapheTotal);
-            //System.out.println("cond3");
 
             //Examiner condition 2
             compteArcsEtSommetsSG();
             if (!(trouveTricycle()) && !((nbrArcs <= (2 * nbrSommets) - 4)) && nbrSommets >= 3) {
                 return false;
             }
-            //System.out.println((nbrArcs<=(2*nbrSommets)-4));
 
             //Examiner condition 1
             if ((trouveTricycle()) && !(nbrArcs <= (3 * nbrSommets) - 6)) {
                 return false;
             }
-            //System.out.println("cond1");
 
         }
 
@@ -267,8 +221,6 @@ public class GrapheA {
 
             //Traverser
             parcourir(i);
-            //System.out.println(visitedSommets);
-            //System.out.println(i);
             ArrayList<Integer> liste = new ArrayList<Integer>();
 
             for (Integer in : visitedSommets) {
@@ -279,51 +231,30 @@ public class GrapheA {
 
             //Vérifier si "graphes" ne contient pas de graphe
             if (graphes.isEmpty()) {
-                //System.out.println("isempty");
                 graphes.put("Graphe " + (i), liste);
             }
 
             //Comparaison entre sous graph potentiel et les autres sous graphes (s'ils existent)
             for (int ii = 0; ii < graphes.size(); ii++) {
-                //System.out.println((graphes.get("Graphe "+ii).size()==liste.size()));
-                //System.out.println(graphes.get("Graphe "+ii));
-                //System.out.println(liste);
 
                 //Vérifier si "graphes" ne contient pas ce graphe déjà
 
-/*
-                //Si les graphes ne sont pas de même taille, ils sont différents
-                if (!(graphes.get("Graphe "+ii).size()==(visitedSommets).size())) {
-                    graphes.put("Graphe "+(ii+1), visitedSommets);
-                    break;
-                } else {
-
- */
                 //Pour chaque valeur dans la clé actuelle de "graphes"
                 for (int iii = 0; iii < liste.size(); iii++) {
                     //System.out.println(iii);
                     if (!(doub.contains(liste.get(iii)))) {
-                        //System.out.println(liste.get(iii));
-                        //System.out.println(graphes.get("Graphe " + ii));
-                        //System.out.println((graphes.get("Graphe " + ii).contains(liste.get(iii))));
+
                         //Comparer chaque valeur, si toutes les valeurs ne sont pas identiques, les graphes sont différents
                         if (!(graphes.get("Graphe " + ii).contains(liste.get(iii)))) {
                             graphes.put("Graphe " + (ii + 1), liste);
-                            //System.out.println("ajoutée");
                             doub.add(liste.get(iii));
-                            //System.out.println(doub);
                             break;
                         }
                         doub.add(liste.get(iii));
-                        //System.out.println(doub);
                     }
                 }
-                //              }
             }
-
         }
-
-
         return graphes;
     }
 
@@ -397,27 +328,16 @@ public class GrapheA {
         if (!(visitedSommets.contains(sommet))) {
             visitedSommets.add(sommet);
         }
-        /*
-        for(int i : visitedSommets) {
-            System.out.print(i+" ");
-        }
-         */
-
         for (int i = 0; i < arcsIncidents(sommet).size(); i++) {
-            //System.out.println(!(arcsA.contains(arcsIncidents(sommet)[i])) || !(arcsD.contains(arcsIncidents(sommet)[i])));
-            //System.out.println(arcsIncidents(sommet).get(i));
             if (!(arcsA.contains(arcsIncidents(sommet).get(i))) && !(arcsD.contains(arcsIncidents(sommet).get(i)))) { //si l'arc n'a pas été visité
                 //cherche pour l'autre sommet qui coincide
 
                 int sommetAdj = chercheIncidence(sommet, arcsIncidents(sommet).get(i));
-                //System.out.println(sommetAdj);
                 if (!(visitedSommets.contains(sommetAdj))) {
-                    //System.out.println("ArcsD :"+arcsD);
                     arcsD.add(arcsIncidents(sommet).get(i));
                     parcourir(sommetAdj);
 
                 } else {
-                    //System.out.println("ArcsA :"+arcsA);
                     arcsA.add(arcsIncidents(sommet).get(i));
 
                 }
@@ -426,20 +346,9 @@ public class GrapheA {
         }
     }
 
-    private ArrayList<Integer> arcsIncidents (int sommet) { //Parcourir le matrice d'incidence pour trouver les arcs qui coincide avec le sommet donné comme argument
+    private ArrayList<Integer> arcsIncidents (int sommet) { //Parcourir la liste des arcs pour trouver les arcs qui coincide avec le sommet donné comme argument
         int c = 0;
         ArrayList <Integer> arcs = new ArrayList<>();
-
-        /*
-        for (int i = 0; i < matriceA[sommet].length; i++) {
-            if (matriceA[sommet][i] == 1) {
-                //System.out.println(i);
-                arcs.add(i);
-            }
-        }
-
-        return arcs;
-         */
 
         ArrayList<ArrayList<Integer>> idArcs = identifieArcs();
         for (int i = 0; i < idArcs.size(); i++) { //Pour chaque arc identifier dans le graphe
@@ -448,13 +357,11 @@ public class GrapheA {
             }
         }
 
-        //System.out.println(idArcs);
-
         return arcs;
 
     }
 
-    private int chercheIncidence (int sommet, int arcId) { //Parcourir le matrice d'incidence pour trouver les arcs associés avec un sommet
+    private int chercheIncidence (int sommet, int arcId) { //Parcourir la liste des arcs pour trouver les arcs associés avec un sommet
         int c=0;
         int adjacent=0;
         ArrayList<ArrayList<Integer>> idArcs = identifieArcs();
@@ -464,29 +371,6 @@ public class GrapheA {
                 adjacent=idArcs.get(arcId).get(i);
             }
         }
-
-        /*
-
-        do {
-            iterations++;
-            if (matriceA[sommet++][arcID] == 1) {
-                // System.out.println("true");
-                c++;
-                if (c==2) {
-                    //System.out.println("truetrue");
-                    adjacent = --sommet;
-                }
-            }
-
-            if (sommet > matriceA.length-1) {
-                sommet = 0;
-            }
-
-
-        } while (c<2);
-        //System.out.println(c);
-
-         */
 
         return adjacent;
 
@@ -508,35 +392,26 @@ public class GrapheA {
 
                     if (arcs.isEmpty()) {
                         arcs.add(arc);
-                        //System.out.println("ajouté");
                     }
 
                     boolean doub = false;
                     for (ArrayList<Integer> a : arcs ) {
-                        //System.out.println(a);
-                        //System.out.println(a.equals(arc));
                         if ((a.equals(arc))) {
                             doub = true;
                             break;
                         }
                     }
 
-                    if (doub == false) {
+                    if (!doub) {
                         arcs.add(arc);
                     }
 
                     arc = new ArrayList<>();
 
                 }
-
             }
-
         }
-
-        //System.out.println(arcs);
-
         return arcs;
-
     }
 
     private void compteArcsEtSommets () {
@@ -583,12 +458,11 @@ public class GrapheA {
             affectations++;
         }
 
-        int a = sommetsIncidents(sommet).size();
+        int a = sommetsAdjacents(sommet).size();
         affectations++;
         for (int i = 0; i < a; i++) {
             iterations++;
-            //System.out.println(arcsIncidents(sommet));
-            int sommetAdj = sommetsIncidents(sommet).get(i);
+            int sommetAdj = sommetsAdjacents(sommet).get(i);
             affectations++;
             if (!(visitedSommets.contains(sommetAdj))) { //si le sommet n'a pas été visité
                 //cherche pour un sommet adjacent
@@ -600,7 +474,7 @@ public class GrapheA {
 
     //La méthode parcourirSimple() dépend sur la méthode ci-dessous, donc la totale d'itérations et affectations inclura les itérations et affectations de chaque méthode ci-dessous ainsi que celles de parcourirSimple()
 
-    private ArrayList<Integer> sommetsIncidents (int sommet) { //Parcourir le matrice d'incidence pour trouver un sommet qui est adjacent avec le sommet donné comme argument
+    private ArrayList<Integer> sommetsAdjacents (int sommet) { //Parcourir le matrice d'incidence pour trouver un sommet qui est adjacent avec le sommet donné comme argument
         int c = 0;
         affectations++;
         ArrayList <Integer> sommets = new ArrayList<>();

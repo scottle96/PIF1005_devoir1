@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class GrapheI {
 
     private static int noInstance=0;
-    private char [][] matriceI;
+    private final char [][] matriceI;
     private int nbrArcs, nbrSommets, iterations, affectations;
     private ArrayList <Integer> arcsD, arcsA, visitedSommets;
     private HashMap<String, Integer> degres;
@@ -88,7 +88,6 @@ public class GrapheI {
 
         //Identifier les sous graphes
         HashMap<String, ArrayList<Integer>> sousGraphes = identifieSousGraphes();
-        boolean ce = false;
 
         //Pour chaque sous graphe
         for (int i = 0; i < sousGraphes.size(); i++) {
@@ -108,7 +107,7 @@ public class GrapheI {
 
 
         return false;
-    };
+    }
 
     private boolean contientCycleEulerien () {
 
@@ -121,9 +120,8 @@ public class GrapheI {
         for (int i = 0; i < degres.size(); i++) {
 
             int deg = degres.get("S"+i);
-            if (deg%2!=0 || deg == 0) {return false;} // Si degré impair ou sommet isolé
-
-            return true;
+            // Si degré impair ou sommet isolé
+            return deg % 2 == 0 && deg != 0;
 
         }
 
@@ -187,13 +185,10 @@ public class GrapheI {
 
         }
 
-        if (impair==2) { // S'il contient exactement deux
-            return true; // Ce contient une chaîne eulérienne
-        } else {
-            return false;
-        }
+        // S'il contient exactement deux
+        return impair == 2; // Ce contient une chaîne eulérienne
 
-    };
+    }
 
     private boolean estPlanaire () {
         /*
